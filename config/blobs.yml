@@ -1,1 +1,9 @@
---- {}
+---
+erlang/otp_src_R14B01.tar.gz:
+  object_id: 28038462-7e7a-4534-8cce-503465435e64
+  sha: f0e0529ed73587c2c4aaeb3f3a01555bd6cfe05c
+  size: 64846537
+riak/riak-1.1.4.tar.gz:
+  object_id: af425713-182c-46cf-b0c2-2d2e78db581d
+  sha: 9a8aac1e40eba4fd62d72d3bd007d0130f30a990
+  size: 11820686
