@@ -1,5 +1,5 @@
 #!/bin/sh
-# USAGE monit_debugger <label> command to run
+# USAGE /var/vcap/packages/common/bin/monit_debugger <label> command to run
 mkdir -p /var/vcap/sys/log/monit
 {
   echo "MONIT-DEBUG date"
