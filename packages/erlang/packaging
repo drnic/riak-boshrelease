@@ -4,12 +4,12 @@ set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 set +x
 
-tar xzf erlang/otp_src_R14B01.tar.gz
+tar xzf erlang/otp_src_R14B04.tar.gz
 
 export HOME=/home/vcap
 
 (
-  cd otp_src_R14B01
+  cd otp_src_R14B04
   ./configure --prefix=${BOSH_INSTALL_TARGET} --without-termcap
   make
   make install
