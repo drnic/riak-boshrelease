@@ -4,7 +4,7 @@ describe "run riak in dev/solo mode"
 
 set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
-set -x
+# set -x
 
 [ "$(whoami)" != 'root' ] && ( echo ERROR: run as root user; exit 1 )
 
@@ -17,7 +17,7 @@ before_all() {
   echo "|"
   echo "| Stopping any existing jobs"
   echo "|"
-  ${scripts}/stop
+  sm bosh-solo stop
 
   echo "|"
   echo "| Deleting existing store folder"
@@ -26,11 +26,11 @@ before_all() {
 
   # update deployment with example properties
   example=${release_path}/examples/dev-solo.yml
-  ${scripts}/update ${example}
+  sm bosh-solo update ${example}
 
   # wait for everything to be finished
   # TODO: necessary?
-  sleep 1
+  sleep 15
   
   # show last 20 processes (for debugging if test fails)
   ps ax | tail -n 20
@@ -47,11 +47,13 @@ before() {
 }
 
 it_runs_the_four_riak_dev_processes() {
-  expected='riak'
+  expected='bin/beam'
+  ps ax | grep "${expected}" | grep -v 'grep'
   test $(ps ax | grep "${expected}" | grep -v 'grep' | wc -l) = 4
 }
 
 # https://wiki.basho.com/Building-a-Development-Environment.html#Test-the-cluster-and-add-some-data-to-verify-the-cluster-is-working
 it_verifies_the_cluster_is_working() {
-  test $(curl -i -H "Accept: text/plain" http://127.0.0.1:8091/stats | grep 'HTTP/1.1 200 Found' | wc -l) = 1
+  curl -I "http://127.0.0.1:8091/stats"
+  test $(curl -I "http://127.0.0.1:8091/stats" 2>&1 | grep 'HTTP/1.1 200 OK' | wc -l) = 1
 }
