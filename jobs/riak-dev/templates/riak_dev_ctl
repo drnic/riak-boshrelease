@@ -5,10 +5,14 @@
 RUN_DIR=/var/vcap/sys/run/riak-dev
 LOG_DIR=/var/vcap/sys/log/riak-dev
 STORE=/var/vcap/store/riak-dev
-PIDFILE=$RUN_DIR/riak.pid
+
+RIAK_DEV_N="$2"
+PIDFILE=$RUN_DIR/riak-$RIAK_DEV_N.pid
 
 source /var/vcap/packages/common/utils.sh
-redirect_output 'riak-dev'
+redirect_output "riak-dev-$RIAK_DEV_N"
+
+export HOME=/var/vcap
 
 case $1 in
 
@@ -17,44 +21,49 @@ case $1 in
     mkdir -p $LOG_DIR
     mkdir -p $STORE
 
-    # TODO - there are 4 processes
-    echo $$ > $PIDFILE
-    
-    export HOME=/var/vcap
-
     # riak installation needs erlang binaries
     PATH=/var/vcap/packages/erlang/bin:$PATH
     
     # https://wiki.basho.com/Building-a-Development-Environment.html
-    echo Starting riak-dev1
-    /var/vcap/packages/riak-dev/dev1/bin/riak start >>$LOG_DIR/riak-dev1.stdout.log 2>>$LOG_DIR/riak-dev1.stderr.log
-    echo Starting riak-dev2
-    /var/vcap/packages/riak-dev/dev2/bin/riak start >>$LOG_DIR/riak-dev2.stdout.log 2>>$LOG_DIR/riak-dev2.stderr.log
-    echo Starting riak-dev3
-    /var/vcap/packages/riak-dev/dev3/bin/riak start >>$LOG_DIR/riak-dev3.stdout.log 2>>$LOG_DIR/riak-dev3.stderr.log
-    echo Starting riak-dev4
-    /var/vcap/packages/riak-dev/dev4/bin/riak start >>$LOG_DIR/riak-dev4.stdout.log 2>>$LOG_DIR/riak-dev4.stderr.log
+    echo Starting riak-dev$RIAK_DEV_N
+    /var/vcap/packages/riak-dev/dev$RIAK_DEV_N/bin/riak start >>$LOG_DIR/riak-dev$RIAK_DEV_N.stdout.log 2>>$LOG_DIR/riak-dev$RIAK_DEV_N.stderr.log
+
+    # run 'raik-admin status' until it doesn't say 'Node is not running!'
+    for (( i = 0; i < 10; i++ ))
+    do
+      status=$(/var/vcap/packages/riak-dev/dev$RIAK_DEV_N/bin/riak-admin status)
+      if [[ "${status}" = 'Node is not running!' ]]
+      then
+        echo "${status}"
+        break;
+      fi
+      sleep 1;
+    done
+
+    # get pid of erlang beam process
+    pid=$(ps ax | grep "/var/vcap/packages/riak-dev/dev$RIAK_DEV_N/.*/bin/beam" | grep -v grep | awk '{ print $1 }')
+    echo "${pid}" > $PIDFILE
+    
+    # /var/vcap/packages/riak-dev/dev$RIAK_DEV_N/**/bin/beam
     
     # wait for all nodes to start
     sleep 5
     
-    echo Joining dev2 -> dev1
-    /var/vcap/packages/riak-dev/dev2/bin/riak-admin join dev1@127.0.0.1
-    echo Joining dev3 -> dev1
-    /var/vcap/packages/riak-dev/dev3/bin/riak-admin join dev1@127.0.0.1
-    echo Joining dev4 -> dev1
-    /var/vcap/packages/riak-dev/dev4/bin/riak-admin join dev1@127.0.0.1
+    if [[ "$RIAK_DEV_N" = 1 ]]
+    then
+      echo Joining dev2 -> dev1
+      /var/vcap/packages/riak-dev/dev2/bin/riak-admin join dev1@127.0.0.1
+      echo Joining dev3 -> dev1
+      /var/vcap/packages/riak-dev/dev3/bin/riak-admin join dev1@127.0.0.1
+      echo Joining dev4 -> dev1
+      /var/vcap/packages/riak-dev/dev4/bin/riak-admin join dev1@127.0.0.1
+    fi
     ;;
 
   stop)
-    echo Stopping riak-dev1
-    /var/vcap/packages/riak-dev/dev1/bin/riak stop >>$LOG_DIR/riak-dev1.stdout.log 2>>$LOG_DIR/riak-dev1.stderr.log
-    echo Stopping riak-dev2
-    /var/vcap/packages/riak-dev/dev2/bin/riak stop >>$LOG_DIR/riak-dev2.stdout.log 2>>$LOG_DIR/riak-dev2.stderr.log
-    echo Stopping riak-dev3
-    /var/vcap/packages/riak-dev/dev3/bin/riak stop >>$LOG_DIR/riak-dev3.stdout.log 2>>$LOG_DIR/riak-dev3.stderr.log
-    echo Stopping riak-dev4
-    /var/vcap/packages/riak-dev/dev4/bin/riak stop >>$LOG_DIR/riak-dev4.stdout.log 2>>$LOG_DIR/riak-dev4.stderr.log
+    echo Stopping riak-dev$RIAK_DEV_N
+    /var/vcap/packages/riak-dev/dev$RIAK_DEV_N/bin/riak stop >>$LOG_DIR/riak-dev$RIAK_DEV_N.stdout.log 2>>$LOG_DIR/riak-dev$RIAK_DEV_N.stderr.log
+    rm $PIDFILE
     ;;
 
   logs)

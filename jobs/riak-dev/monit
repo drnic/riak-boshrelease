@@ -1,5 +1,7 @@
-check process riak
-  with pidfile /var/vcap/sys/run/riak/riak.pid
-  start program "/var/vcap/packages/common/bin/monit_debugger riak_dev_ctl /var/vcap/jobs/riak-dev/bin/riak_dev_ctl start"
-  stop program  "/var/vcap/packages/common/bin/monit_debugger riak_dev_ctl /var/vcap/jobs/riak-dev/bin/riak_dev_ctl stop"
+<% 1.upto(4).each do |n| %>
+check process riak-dev-<%= n %>
+  with pidfile "/var/vcap/sys/run/riak-dev/riak-<%= n %>.pid"
+  start program "/var/vcap/packages/common/bin/monit_debugger riak_dev<%= n %>_ctl /var/vcap/jobs/riak-dev/bin/riak_dev_ctl start <%= n %>"
+  stop program  "/var/vcap/packages/common/bin/monit_debugger riak_dev<%= n %>_ctl /var/vcap/jobs/riak-dev/bin/riak_dev_ctl stop  <%= n %>"
   group vcap
+<% end %>
