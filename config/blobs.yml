@@ -7,7 +7,7 @@ riak/riak-1.1.4.tar.gz:
   object_id: af425713-182c-46cf-b0c2-2d2e78db581d
   sha: 9a8aac1e40eba4fd62d72d3bd007d0130f30a990
   size: 11820686
-riak/otp_src_R14B04.tar.gz:
+erlang/otp_src_R14B04.tar.gz:
   object_id: ca91a7bb-f70b-4dd6-a793-b7a6240c3434
   sha: e469c20c8be6c51bb584a2dec235c4714a60b4db
   size: 70773703
