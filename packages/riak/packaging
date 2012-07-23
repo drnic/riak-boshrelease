@@ -14,5 +14,5 @@ tar xzf riak/riak-${RIAK_VERSION}.tar.gz
   make rel
   
   # output is in rel/riak
-  cp -r rel/riak/* $BOSH_INSTALL_TARGET
+  cp -prv rel/riak ${BOSH_INSTALL_TARGET}
 )
