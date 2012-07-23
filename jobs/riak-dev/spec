@@ -1,0 +1,8 @@
+---
+name: riak-dev
+packages:
+- riak-dev
+- erlang
+- common
+templates:
+  riak_dev_ctl: bin/riak_dev_ctl

@@ -1,3 +1,4 @@
 ---
-properties:
-  dev_solo: 1
+jobs:
+  - riak-dev
+properties: {}

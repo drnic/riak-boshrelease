@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# Control script to start/stop ruby/rack riak job on a BOSH controlled VM
+
+RUN_DIR=/var/vcap/sys/run/riak-dev
+LOG_DIR=/var/vcap/sys/log/riak-dev
+STORE=/var/vcap/store/riak-dev
+PIDFILE=$RUN_DIR/riak.pid
+
+source /var/vcap/packages/common/utils.sh
+redirect_output 'riak-dev'
+
+case $1 in
+
+  start)
+    mkdir -p $RUN_DIR
+    mkdir -p $LOG_DIR
+    mkdir -p $STORE
+
+    # TODO - there are 4 processes
+    echo $$ > $PIDFILE
+    
+    export HOME=/var/vcap
+
+    # riak installation needs erlang binaries
+    PATH=/var/vcap/packages/erlang/bin:$PATH
+    
+    # https://wiki.basho.com/Building-a-Development-Environment.html
+    echo Starting riak-dev1
+    /var/vcap/packages/riak-dev/dev1/bin/riak start >>$LOG_DIR/riak-dev1.stdout.log 2>>$LOG_DIR/riak-dev1.stderr.log
+    echo Starting riak-dev2
+    /var/vcap/packages/riak-dev/dev2/bin/riak start >>$LOG_DIR/riak-dev2.stdout.log 2>>$LOG_DIR/riak-dev2.stderr.log
+    echo Starting riak-dev3
+    /var/vcap/packages/riak-dev/dev3/bin/riak start >>$LOG_DIR/riak-dev3.stdout.log 2>>$LOG_DIR/riak-dev3.stderr.log
+    echo Starting riak-dev4
+    /var/vcap/packages/riak-dev/dev4/bin/riak start >>$LOG_DIR/riak-dev4.stdout.log 2>>$LOG_DIR/riak-dev4.stderr.log
+    
+    # wait for all nodes to start
+    sleep 5
+    
+    echo Joining dev2 -> dev1
+    /var/vcap/packages/riak-dev/dev2/bin/riak-admin join dev1@127.0.0.1
+    echo Joining dev3 -> dev1
+    /var/vcap/packages/riak-dev/dev3/bin/riak-admin join dev1@127.0.0.1
+    echo Joining dev4 -> dev1
+    /var/vcap/packages/riak-dev/dev4/bin/riak-admin join dev1@127.0.0.1
+    ;;
+
+  stop)
+    echo Stopping riak-dev1
+    /var/vcap/packages/riak-dev/dev1/bin/riak stop >>$LOG_DIR/riak-dev1.stdout.log 2>>$LOG_DIR/riak-dev1.stderr.log
+    echo Stopping riak-dev2
+    /var/vcap/packages/riak-dev/dev2/bin/riak stop >>$LOG_DIR/riak-dev2.stdout.log 2>>$LOG_DIR/riak-dev2.stderr.log
+    echo Stopping riak-dev3
+    /var/vcap/packages/riak-dev/dev3/bin/riak stop >>$LOG_DIR/riak-dev3.stdout.log 2>>$LOG_DIR/riak-dev3.stderr.log
+    echo Stopping riak-dev4
+    /var/vcap/packages/riak-dev/dev4/bin/riak stop >>$LOG_DIR/riak-dev4.stdout.log 2>>$LOG_DIR/riak-dev4.stderr.log
+    ;;
+
+  logs)
+    cat $LOG_DIR/*
+    ;;
+
+  tail)
+    tail -f $LOG_DIR/*
+    ;;
+
+  clearlogs)
+    rm $LOG_DIR/*
+    ;;
+
+  *)
+  echo "Usage: riak_ctl {start|stop|logs|tail|clearlogs}" ;;
+esac
+exit 0

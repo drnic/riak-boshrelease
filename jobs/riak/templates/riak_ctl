@@ -18,11 +18,6 @@ LOG_DIR=/var/vcap/sys/log/riak
 STORE=/var/vcap/store/riak
 PIDFILE=$RUN_DIR/riak.pid
 
-export PATH=/var/vcap/packages/ruby/bin:$PATH
-
-COMMAND=${COMMAND:-/var/vcap/packages/riak/bin/riak start}
-HOME=${HOME:-/home/vcap}
-
 case $1 in
 
   start)
@@ -32,7 +27,11 @@ case $1 in
 
     echo $$ > $PIDFILE
 
-    exec $COMMAND >>$LOG_DIR/riak.stdout.log 2>>$LOG_DIR/riak.stderr.log
+    export HOME=/var/vcap
+
+    exec /var/vcap/packages/riak/bin/riak start >>$LOG_DIR/riak.stdout.log 2>>$LOG_DIR/riak.stderr.log
+
+    # configure cluster http://wiki.basho.com/Basic-Cluster-Setup.html
     ;;
 
   stop)

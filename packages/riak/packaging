@@ -6,11 +6,13 @@ set +x
 
 RIAK_VERSION=1.1.4
 
+PATH=/var/vcap/packages/erlang/bin:$PATH
 tar xzf riak/riak-${RIAK_VERSION}.tar.gz
 
 (
   cd riak-${RIAK_VERSION}
-  # ./configure --prefix=$BOSH_INSTALL_TARGET
+
+  # make rel/riak
   make rel
   
   # output is in rel/riak
