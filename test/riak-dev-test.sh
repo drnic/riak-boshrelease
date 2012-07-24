@@ -47,7 +47,7 @@ before() {
 }
 
 it_runs_the_four_riak_dev_processes() {
-  expected='bin/beam'
+  expected='bin/beam -K'
   ps ax | grep "${expected}" | grep -v 'grep'
   test $(ps ax | grep "${expected}" | grep -v 'grep' | wc -l) = 4
 }
@@ -56,4 +56,10 @@ it_runs_the_four_riak_dev_processes() {
 it_verifies_the_cluster_is_working() {
   curl -I "http://127.0.0.1:8091/stats"
   test $(curl -I "http://127.0.0.1:8091/stats" 2>&1 | grep 'HTTP/1.1 200 OK' | wc -l) = 1
+}
+
+it_runs_riak_admin_test_cycle() {
+  result=$(/var/vcap/packages/riak-dev/dev2/bin/riak-admin test)
+  expected="Successfully completed 1 read/write cycle to 'dev2@127.0.0.1'"
+  test "${expected}" = "${result}"
 }
