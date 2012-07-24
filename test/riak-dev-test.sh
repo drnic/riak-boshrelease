@@ -59,7 +59,7 @@ it_verifies_the_cluster_is_working() {
 }
 
 it_runs_riak_admin_test_cycle() {
-  result=$(/var/vcap/packages/riak-dev/dev2/bin/riak-admin test)
+  result=$(/var/vcap/packages/riak/dev2/bin/riak-admin test)
   expected="Successfully completed 1 read/write cycle to 'dev2@127.0.0.1'"
   test "${expected}" = "${result}"
 }

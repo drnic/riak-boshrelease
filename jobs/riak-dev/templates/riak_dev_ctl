@@ -26,12 +26,12 @@ case $1 in
     
     # https://wiki.basho.com/Building-a-Development-Environment.html
     echo Starting riak-dev$RIAK_DEV_N
-    /var/vcap/packages/riak-dev/dev$RIAK_DEV_N/bin/riak start >>$LOG_DIR/riak-dev$RIAK_DEV_N.stdout.log 2>>$LOG_DIR/riak-dev$RIAK_DEV_N.stderr.log
+    /var/vcap/packages/riak/dev$RIAK_DEV_N/bin/riak start >>$LOG_DIR/riak-dev$RIAK_DEV_N.stdout.log 2>>$LOG_DIR/riak-dev$RIAK_DEV_N.stderr.log
 
     # run 'raik-admin status' until it doesn't say 'Node is not running!'
     for (( i = 0; i < 10; i++ ))
     do
-      status=$(/var/vcap/packages/riak-dev/dev$RIAK_DEV_N/bin/riak-admin status)
+      status=$(/var/vcap/packages/riak/dev$RIAK_DEV_N/bin/riak-admin status)
       if [[ "${status}" = 'Node is not running!' ]]
       then
         echo "${status}"
@@ -41,10 +41,10 @@ case $1 in
     done
 
     # get pid of erlang beam process
-    pid=$(ps ax | grep "/var/vcap/packages/riak-dev/dev$RIAK_DEV_N/.*/bin/beam" | grep -v grep | awk '{ print $1 }')
+    pid=$(ps ax | grep "/var/vcap/packages/riak/dev$RIAK_DEV_N/.*/bin/beam" | grep -v grep | awk '{ print $1 }')
     echo "${pid}" > $PIDFILE
     
-    # /var/vcap/packages/riak-dev/dev$RIAK_DEV_N/**/bin/beam
+    # /var/vcap/packages/riak/dev$RIAK_DEV_N/**/bin/beam
     
     # wait for all nodes to start
     sleep 5
@@ -52,17 +52,17 @@ case $1 in
     if [[ "$RIAK_DEV_N" = 1 ]]
     then
       echo Joining dev2 -> dev1
-      /var/vcap/packages/riak-dev/dev2/bin/riak-admin join dev1@127.0.0.1
+      /var/vcap/packages/riak/dev2/bin/riak-admin join dev1@127.0.0.1
       echo Joining dev3 -> dev1
-      /var/vcap/packages/riak-dev/dev3/bin/riak-admin join dev1@127.0.0.1
+      /var/vcap/packages/riak/dev3/bin/riak-admin join dev1@127.0.0.1
       echo Joining dev4 -> dev1
-      /var/vcap/packages/riak-dev/dev4/bin/riak-admin join dev1@127.0.0.1
+      /var/vcap/packages/riak/dev4/bin/riak-admin join dev1@127.0.0.1
     fi
     ;;
 
   stop)
     echo Stopping riak-dev$RIAK_DEV_N
-    /var/vcap/packages/riak-dev/dev$RIAK_DEV_N/bin/riak stop >>$LOG_DIR/riak-dev$RIAK_DEV_N.stdout.log 2>>$LOG_DIR/riak-dev$RIAK_DEV_N.stderr.log
+    /var/vcap/packages/riak/dev$RIAK_DEV_N/bin/riak stop >>$LOG_DIR/riak-dev$RIAK_DEV_N.stdout.log 2>>$LOG_DIR/riak-dev$RIAK_DEV_N.stderr.log
     rm $PIDFILE
     ;;
 
