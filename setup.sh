@@ -27,3 +27,5 @@ then
   sudo mkdir -p /var/vcap
   sudo touch /var/vcap/install_dependencies_complete
 fi
+
+# TODO run: sm bosh-solo update examples/dev-solo.yml or rel.yml
