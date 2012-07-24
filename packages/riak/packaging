@@ -13,9 +13,13 @@ set +x
 
 RIAK_VERSION=1.1.4
 
-PATH=/var/vcap/packages/erlang/bin:$PATH
-tar xzf riak/riak-${RIAK_VERSION}.tar.gz
+# riak installation requires $HOME
+export HOME=/home/vcap
 
+# riak install requires erlang binaries to be in $PATH
+PATH=/var/vcap/packages/erlang/bin:$PATH
+
+tar xzf riak/riak-${RIAK_VERSION}.tar.gz
 cd riak-${RIAK_VERSION}
 
 # make rel/riak
