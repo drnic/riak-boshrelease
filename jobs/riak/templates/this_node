@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+# Returns the riak node name for this VM
+# E.g. 'riak@10.10.10.33'
+
+require "yaml"

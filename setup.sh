@@ -24,8 +24,13 @@ then
 
   sudo /usr/local/rvm/bin/rvm 1.9.3 --default
   
+  mv /etc/resolv.conf /etc/resolv.conf.bak
+  echo 'nameserver 8.8.8.8' >> /etc/resolv.conf
+  echo 'nameserver 8.8.4.4' >> /etc/resolv.conf
+  
   sudo mkdir -p /var/vcap
   sudo touch /var/vcap/install_dependencies_complete
+  
 fi
 
 # TODO run: sm bosh-solo update examples/dev-solo.yml or rel.yml

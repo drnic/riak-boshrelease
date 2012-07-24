@@ -66,6 +66,20 @@ All logs will be sent to the terminal so you can watch for any errors as quickly
 sm bosh-solo tail_logs
 ```
 
+### Multi-VM development within Vagrant
+
+To boot up Vagrant into multi-VM mode:
+
+```
+MULTIVM=4 vagrant up
+```
+
+You can then shell into each VM via its name (rel1, rel2, rel3, ...).
+
+```
+MULTIVM=4 vagrant ssh rel1
+```
+
 ### Finalizing a release
 
 If you create a final release `bosh create release --final`, you must immediately create a new development release. Yeah, this is a bug I guess.
