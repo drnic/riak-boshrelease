@@ -7,7 +7,7 @@ set +x
 if [[ ! -f /var/vcap/install_dependencies_complete ]]
 then
   echo Installing dependencies for bosh-solo
-  # 
+
   sudo apt-get install curl git-core -y
   
   if [[ ! -x /opt/sm/bin/sm ]]
@@ -21,9 +21,9 @@ then
   fi
   sudo /opt/sm/bin/sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
   sudo /opt/sm/bin/sm bosh-solo install_dependencies
-  # 
-  # source /etc/profile.d/rvm.sh
-  # sudo rvm 1.9.3 --default
-  # 
-  # sudo touch /var/vcap/install_dependencies_complete
+
+  sudo /usr/local/rvm/bin/rvm 1.9.3 --default
+  
+  sudo mkdir -p /var/vcap
+  sudo touch /var/vcap/install_dependencies_complete
 fi
