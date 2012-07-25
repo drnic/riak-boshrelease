@@ -34,6 +34,7 @@ curl -L https://get.smf.sh | sh
 source /etc/profile.d/sm.sh
 sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
 sm bosh-solo install_dependencies
+
 source /etc/profile.d/rvm.sh
 rvm 1.9.3 --default
 
@@ -63,6 +64,20 @@ All logs will be sent to the terminal so you can watch for any errors as quickly
 ```
 [inside vagrant as root user]
 sm bosh-solo tail_logs
+```
+
+### Multi-VM development within Vagrant
+
+To boot up Vagrant into multi-VM mode:
+
+```
+MULTIVM=4 vagrant up
+```
+
+You can then shell into each VM via its name (rel1, rel2, rel3, ...).
+
+```
+MULTIVM=4 vagrant ssh rel1
 ```
 
 ### Finalizing a release

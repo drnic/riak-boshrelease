@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+# Returns the riak node name for this VM
+# E.g. 'riak@10.10.10.33'
+
+require "yaml"
+
+first_ip = ARGV.first 
+# ohai | jazor 'network.interfaces.eth1.addresses["192.168.10.11"]'
+# {
+#   "netmask": "255.255.255.0",
+#   "scope": "Global",
+#   "prefixlen": "24",
+#   "broadcast": "192.168.10.255",
+#   "family": "inet"
+# }

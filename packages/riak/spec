@@ -4,3 +4,4 @@ dependencies:
   - erlang
 files:
   - riak/riak-1.1.4.tar.gz
+  - leveldb/leveldb-14478f17.zip

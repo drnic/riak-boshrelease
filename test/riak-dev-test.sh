@@ -4,7 +4,6 @@ describe "run riak in dev/solo mode"
 
 set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
-# set -x
 
 [ "$(whoami)" != 'root' ] && ( echo ERROR: run as root user; exit 1 )
 

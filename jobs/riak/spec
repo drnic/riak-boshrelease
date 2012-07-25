@@ -3,5 +3,7 @@ name: riak
 packages:
 - riak
 - erlang
+- common
 templates:
-  riak_ctl: bin/riak_ctl
+  riak_ctl.erb: bin/riak_ctl
+  this_node:    bin/this_node

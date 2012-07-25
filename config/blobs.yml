@@ -11,3 +11,7 @@ erlang/otp_src_R14B04.tar.gz:
   object_id: ca91a7bb-f70b-4dd6-a793-b7a6240c3434
   sha: e469c20c8be6c51bb584a2dec235c4714a60b4db
   size: 70773703
+leveldb/leveldb-14478f17.zip:
+  object_id: 9ae610ab-3fff-429c-afae-2dd31babba5b
+  sha: 1552bcf2fc9fe8bdb035cba92e1226686f1d2431
+  size: 249991

@@ -1,0 +1,10 @@
+---
+jobs:
+  - riak
+properties:
+  riak:
+    nodes:
+      - riak@192.168.10.11
+      - riak@192.168.10.12
+      - riak@192.168.10.13
+      - riak@192.168.10.14
