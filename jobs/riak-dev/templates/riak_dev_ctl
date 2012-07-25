@@ -7,6 +7,11 @@ LOG_DIR=/var/vcap/sys/log/riak-dev
 STORE=/var/vcap/store/riak-dev
 
 RIAK_DEV_N="$2"
+if [[ ! -x /var/vcap/packages/riak/dev$RIAK_DEV_N/bin/riak ]]
+then
+  echo riak_dev_ctl: Invalid or missing argument: $2
+  exit 1
+fi
 PIDFILE=$RUN_DIR/riak-$RIAK_DEV_N.pid
 
 source /var/vcap/packages/common/utils.sh
