@@ -5,4 +5,4 @@ packages:
 - erlang
 - common
 templates:
-  riak_dev_ctl: bin/riak_dev_ctl
+  riak_dev_ctl:                 bin/riak_dev_ctl
