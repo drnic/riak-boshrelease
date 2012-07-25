@@ -1,4 +1,4 @@
-<% 1.upto(4).each do |n| %>
+<% 4.downto(1).each do |n| %>
 check process riak-dev-<%= n %>
   with pidfile "/var/vcap/sys/run/riak-dev/riak-<%= n %>.pid"
   start program "/var/vcap/packages/common/bin/monit_debugger riak_dev<%= n %>_ctl /var/vcap/jobs/riak-dev/bin/riak_dev_ctl start <%= n %>"
