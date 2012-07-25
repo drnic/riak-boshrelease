@@ -23,10 +23,10 @@ cd riak-${RIAK_VERSION}
 cd deps/eleveldb/c_src/
 unzip ${BOSH_COMPILE_TARGET}/leveldb/leveldb-14478f17.zip
 mv basho-leveldb-14478f1 leveldb
-cd ../../../
 
+cd ${BOSH_COMPILE_TARGET}/riak-${RIAK_VERSION}
 # make rel/riak
-make compile
+make rel
 
 # output is in rel/riak
 cp -prv rel/riak ${BOSH_INSTALL_TARGET}/rel
