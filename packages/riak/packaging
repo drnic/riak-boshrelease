@@ -12,14 +12,21 @@ set -u # report the usage of uninitialized variables
 set +x
 
 RIAK_VERSION=1.1.4
-
+export HOME=/var/vcap
 PATH=/var/vcap/packages/erlang/bin:$PATH
-tar xzf riak/riak-${RIAK_VERSION}.tar.gz
 
+tar xzf riak/riak-${RIAK_VERSION}.tar.gz
 cd riak-${RIAK_VERSION}
 
+# riak-1.1.4 failed to contain leveldb
+# https://github.com/basho/riak/issues/191
+cd deps/eleveldb/c_src/
+unzip ${BOSH_COMPILE_TARGET}/leveldb/leveldb-14478f17.zip
+mv basho-leveldb-14478f1 leveldb
+cd ../../../
+
 # make rel/riak
-make rel
+make compile
 
 # output is in rel/riak
 cp -prv rel/riak ${BOSH_INSTALL_TARGET}/rel

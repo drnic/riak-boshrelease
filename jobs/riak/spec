@@ -6,3 +6,4 @@ packages:
 - common
 templates:
   riak_ctl.erb: bin/riak_ctl
+  this_node:    bin/this_node
