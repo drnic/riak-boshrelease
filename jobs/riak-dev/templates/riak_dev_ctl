@@ -52,16 +52,17 @@ case $1 in
     # /var/vcap/packages/riak/dev$RIAK_DEV_N/**/bin/beam
     
     # wait for all nodes to start
+    # TODO - how long? other blocking riak-admin call?
     sleep 5
     
     if [[ "$RIAK_DEV_N" = 1 ]]
     then
-      echo Joining dev2 -> dev1
-      /var/vcap/packages/riak/dev2/bin/riak-admin join dev1@127.0.0.1
-      echo Joining dev3 -> dev1
-      /var/vcap/packages/riak/dev3/bin/riak-admin join dev1@127.0.0.1
-      echo Joining dev4 -> dev1
-      /var/vcap/packages/riak/dev4/bin/riak-admin join dev1@127.0.0.1
+      echo Joining dev1 -> dev2
+      /var/vcap/packages/riak/dev1/bin/riak-admin join dev2@127.0.0.1
+      echo Joining dev1 -> dev3
+      /var/vcap/packages/riak/dev1/bin/riak-admin join dev3@127.0.0.1
+      echo Joining dev1 -> dev4
+      /var/vcap/packages/riak/dev1/bin/riak-admin join dev4@127.0.0.1
     fi
     ;;
 
