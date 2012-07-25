@@ -62,3 +62,11 @@ it_runs_riak_admin_test_cycle() {
   expected="Successfully completed 1 read/write cycle to 'dev2@127.0.0.1'"
   test "${expected}" = "${result}"
 }
+
+it_binds_to_0_0_0_0() {
+  test $(cat /var/vcap/packages/riak/dev2/etc/app.config | grep 0.0.0.0 | wc -l) = 3
+}
+
+it_does_not_bind_to_127_0_0_1() {
+  test $(cat /var/vcap/packages/riak/dev4/etc/app.config | grep 127.0.0.1 | wc -l) = 0
+}
