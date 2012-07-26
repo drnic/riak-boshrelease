@@ -54,11 +54,11 @@ case $1 in
     
     if [[ "$RIAK_DEV_N" = 1 ]]
     then
-      echo Joining dev2 -> dev1
+      echo "Joining dev2 -> dev1"
       /var/vcap/packages/riak/bin/riak-admin join dev1@127.0.0.1
-      echo Joining dev3 -> dev1
+      echo "Joining dev3 -> dev1"
       /var/vcap/packages/riak/bin/riak-admin join dev1@127.0.0.1
-      echo Joining dev4 -> dev1
+      echo "Joining dev4 -> dev1"
       /var/vcap/packages/riak/bin/riak-admin join dev1@127.0.0.1
     fi
     ;;
