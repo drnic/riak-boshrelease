@@ -1,0 +1,26 @@
+--- 
+packages: 
+- name: common
+  version: 1
+  sha1: 35978d94d67a9d39aaff118a338032d0937284d6
+  dependencies: []
+
+- name: erlang
+  version: 1
+  sha1: 3ff0c166ee630b4519a0a3a953f9f665fdc305b2
+  dependencies: []
+
+- name: riak
+  version: 4
+  sha1: 301ed2188c84acc1ed520640862e39cc5b0f9e0a
+  dependencies: 
+  - erlang
+jobs: 
+- name: riak
+  version: 3
+  sha1: f50418d907974f5ee00f145427b1b900dd147b6b
+- name: riak-dev
+  version: 3
+  sha1: 8da47162d999e27592fc8c803d574794d63364da
+name: riak
+version: 4
