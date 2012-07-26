@@ -53,7 +53,7 @@ case $1 in
     # at least the last node will be successful
     # so ignore any failures before "node not available yet"
     # and any failures of attempting to join to self
-    set -x
+    set +e
     for node in $NODES
     do
       echo "Joining to -> ${node}"
@@ -63,6 +63,12 @@ case $1 in
 
   stop)
     echo Stopping riak
+    
+    # Attempt to leave the ring
+    set +e
+    /var/vcap/packages/riak/rel/bin/riak-admin leave >>$LOG_DIR/riak.stdout.log 2>>$LOG_DIR/riak.stderr.log
+    set -e
+    
     /var/vcap/packages/riak/rel/bin/riak stop >>$LOG_DIR/riak.stdout.log 2>>$LOG_DIR/riak.stderr.log
     rm $PIDFILE
     ;;

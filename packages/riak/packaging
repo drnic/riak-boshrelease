@@ -32,9 +32,6 @@ cd ${BOSH_COMPILE_TARGET}/riak-${RIAK_VERSION}
 # make rel/riak
 make rel
 
-# output is in rel/riak
-cp -prv rel/riak ${BOSH_INSTALL_TARGET}/rel
-
 # https://wiki.basho.com/Building-a-Development-Environment.html
 # make 4 copies of riak:
 # - dev/dev1
@@ -45,10 +42,13 @@ make devrel
 
 # convert loopback (127.0.0.1) bindings to default route (0.0.0.0)
 # to allow external inbound connections
-for config in $(ls dev/**/etc/app.config)
+for config in $(ls {dev,rel}/**/etc/app.config)
 do
   sed -i -e "s/127\.0\.0\.1/0.0.0.0/g" ${config}
 done
+
+# output is in rel/riak
+cp -prv rel/riak ${BOSH_INSTALL_TARGET}/rel
 
 # output is in dev1/riak, dev2/riak, dev3/riak, dev4/riak
 cp -prv dev/* ${BOSH_INSTALL_TARGET}
