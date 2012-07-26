@@ -2,6 +2,10 @@
 
 # Control script to start/stop ruby/rack riak job on a BOSH controlled VM
 
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+set +x
+
 RUN_DIR=/var/vcap/sys/run/riak-dev
 LOG_DIR=/var/vcap/sys/log/riak-dev
 STORE=/var/vcap/store/riak-dev
@@ -9,8 +13,6 @@ STORE=/var/vcap/store/riak-dev
 PIDFILE=$RUN_DIR/riak.pid
 
 NODES=(<%= properties.riak.nodes.join(" ") %>)
-FIRST_NODE='<%= properties.riak.nodes.first %>'
-AM_FIRST_NODE='<%= /var/vcap/jobs/riak/bin/am_first_node %>'
 
 source /var/vcap/packages/common/utils.sh
 redirect_output "riak"
@@ -29,12 +31,12 @@ case $1 in
     
     # https://wiki.basho.com/Building-a-Development-Environment.html
     echo Starting riak
-    /var/vcap/packages/riak/bin/riak start >>$LOG_DIR/riak.stdout.log 2>>$LOG_DIR/riak.stderr.log
+    /var/vcap/packages/riak/rel/bin/riak start >>$LOG_DIR/riak.stdout.log 2>>$LOG_DIR/riak.stderr.log
 
     # run 'raik-admin status' until it doesn't say 'Node is not running!'
     for (( i = 0; i < 10; i++ ))
     do
-      status=$(/var/vcap/packages/riak/bin/riak-admin status)
+      status=$(/var/vcap/packages/riak/rel/bin/riak-admin status)
       if [[ "${status}" = 'Node is not running!' ]]
       then
         echo "${status}"
@@ -47,25 +49,21 @@ case $1 in
     pid=$(ps ax | grep "/var/vcap/packages/riak/.*/bin/beam" | grep -v grep | awk '{ print $1 }')
     echo "${pid}" > $PIDFILE
     
-    # /var/vcap/packages/riak/**/bin/beam
-    
-    # wait for all nodes to start
-    sleep 5
-    
-    if [[ "$RIAK_DEV_N" = 1 ]]
-    then
-      echo "Joining dev2 -> dev1"
-      /var/vcap/packages/riak/bin/riak-admin join dev1@127.0.0.1
-      echo "Joining dev3 -> dev1"
-      /var/vcap/packages/riak/bin/riak-admin join dev1@127.0.0.1
-      echo "Joining dev4 -> dev1"
-      /var/vcap/packages/riak/bin/riak-admin join dev1@127.0.0.1
-    fi
+    # every node tries to join itself to all other nodes
+    # at least the last node will be successful
+    # so ignore any failures before "node not available yet"
+    # and any failures of attempting to join to self
+    set -x
+    for node in $NODES
+    do
+      echo "Joining to -> ${node}"
+      /var/vcap/packages/riak/rel/bin/riak-admin join ${node}
+    done
     ;;
 
   stop)
     echo Stopping riak
-    /var/vcap/packages/riak/bin/riak stop >>$LOG_DIR/riak.stdout.log 2>>$LOG_DIR/riak.stderr.log
+    /var/vcap/packages/riak/rel/bin/riak stop >>$LOG_DIR/riak.stdout.log 2>>$LOG_DIR/riak.stderr.log
     rm $PIDFILE
     ;;
 

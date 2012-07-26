@@ -2,6 +2,10 @@
 
 # Control script to start/stop ruby/rack riak job on a BOSH controlled VM
 
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+set +x
+
 RUN_DIR=/var/vcap/sys/run/riak-dev
 LOG_DIR=/var/vcap/sys/log/riak-dev
 STORE=/var/vcap/store/riak-dev
