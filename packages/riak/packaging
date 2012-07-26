@@ -47,9 +47,10 @@ do
   sed -i -e "s/127\.0\.0\.1/0.0.0.0/g" ${config}
 done
 
-# output is in rel/riak
+# normal production copy of riak
 cp -prv rel/riak ${BOSH_INSTALL_TARGET}/rel
 
-# output is in dev1/riak, dev2/riak, dev3/riak, dev4/riak
+# dev versions of riak
+# folders copied: dev1, dev2, dev3, dev4
 cp -prv dev/* ${BOSH_INSTALL_TARGET}
 
