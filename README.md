@@ -7,6 +7,7 @@ This project is a BOSH release for `riak-boshrelease`.
 This project includes development support within Vagrant using [bosh-solo](http://drnic.github.com/bosh-solo)
 
 ```
+$ bundle
 $ bosh create release
 
 $ vagrant up
