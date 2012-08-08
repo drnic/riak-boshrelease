@@ -15,3 +15,7 @@ leveldb/leveldb-14478f17.zip:
   object_id: 9ae610ab-3fff-429c-afae-2dd31babba5b
   sha: 1552bcf2fc9fe8bdb035cba92e1226686f1d2431
   size: 249991
+riak/riak-1.2.0.tar.gz:
+  object_id: fa573c40-e4de-4c47-86ca-7b0755224fa4
+  sha: 2952546ccfbdbedbad918da076289e408f518ae0
+  size: 11221316
