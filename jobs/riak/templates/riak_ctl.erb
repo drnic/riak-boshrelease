@@ -57,7 +57,7 @@ case $1 in
     for node in $NODES
     do
       echo "Joining to -> ${node}"
-      /var/vcap/packages/riak/rel/bin/riak-admin join ${node}
+      /var/vcap/packages/riak/rel/bin/riak-admin cluster join ${node}
     done
     ;;
 
