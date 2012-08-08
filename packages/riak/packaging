@@ -22,6 +22,12 @@ PATH=/var/vcap/packages/erlang/bin:$PATH
 tar xzf riak/riak-${RIAK_VERSION}.tar.gz
 cd riak-${RIAK_VERSION}
 
+# riak-1.1.4 & riak 1.2.0 failed to contain leveldb
+# https://github.com/basho/riak/issues/191
+cd deps/eleveldb/c_src/
+tar xzf ${BOSH_COMPILE_TARGET}/leveldb/leveldb-2aebdd9.tar.gz
+mv basho-leveldb-2aebdd9 leveldb
+
 cd ${BOSH_COMPILE_TARGET}/riak-${RIAK_VERSION}
 make rel
 
