@@ -54,7 +54,12 @@ case $1 in
 
   stop)
     echo Stopping riak
-    kill_and_wait $PIDFILE
+    if [[ -f $PIDFILE ]]
+    then
+      kill_and_wait "/var/vcap/packages/riak/.*/bin/beam"
+    else
+      kill_and_wait $PIDFILE
+    fi
     ;;
 
   logs)
