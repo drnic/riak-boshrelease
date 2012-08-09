@@ -19,3 +19,7 @@ riak/riak-1.2.0.tar.gz:
   object_id: fa573c40-e4de-4c47-86ca-7b0755224fa4
   sha: 2952546ccfbdbedbad918da076289e408f518ae0
   size: 11221316
+leveldb/leveldb-2aebdd9.tar.gz:
+  object_id: cb6174f6-3a13-470c-81d6-deac19d93c2a
+  sha: 2481353847835918a29d65d5aa87475f4cf95f69
+  size: 202955
