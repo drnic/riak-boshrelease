@@ -29,10 +29,11 @@ case $1 in
       status=$(riak-admin status)
       if [[ "${status}" = 'Node is not running!' ]]
       then
+        sleep 1;
+      else
         echo "${status}"
         break;
       fi
-      sleep 1;
     done
 
     # get pid of erlang beam process
@@ -47,6 +48,7 @@ case $1 in
       for node in $NODES_EXCEPT_FIRST
       do
         echo "Joining $FIRST_NODE to ${node}"
+        echo riak-admin cluster join "${node}"
         riak-admin cluster join "${node}"
       done
     fi

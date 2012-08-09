@@ -35,10 +35,11 @@ case $1 in
       status=$(/var/vcap/packages/riak/dev$RIAK_DEV_N/bin/riak-admin status)
       if [[ "${status}" = 'Node is not running!' ]]
       then
+        sleep 1;
+      else
         echo "${status}"
         break;
       fi
-      sleep 1;
     done
 
     # get pid of erlang beam process
