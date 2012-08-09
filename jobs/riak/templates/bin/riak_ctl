@@ -6,25 +6,15 @@ set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 set +x
 
-RUN_DIR=/var/vcap/sys/run/riak-dev
-LOG_DIR=/var/vcap/sys/log/riak-dev
+# Setup env vars and folders for the monit script
+source /var/vcap/jobs/riak/helpers/ctl_setup.sh 'riak'
+
 STORE=/var/vcap/store/riak-dev
-
-PIDFILE=$RUN_DIR/riak.pid
-
-NODES=(<%= properties.riak.nodes.join(" ") %>)
-
-source /var/vcap/packages/common/utils.sh
-redirect_output "riak"
-
-export HOME=/var/vcap
 
 case $1 in
 
   start)
-    mkdir -p $RUN_DIR
-    mkdir -p $LOG_DIR
-    mkdir -p $STORE
+    pid_guard $PIDFILE "riak"
 
     # riak installation needs erlang binaries
     PATH=/var/vcap/packages/erlang/bin:$PATH
@@ -49,16 +39,17 @@ case $1 in
     pid=$(ps ax | grep "/var/vcap/packages/riak/.*/bin/beam" | grep -v grep | awk '{ print $1 }')
     echo "${pid}" > $PIDFILE
     
-    # every node tries to join itself to all other nodes
-    # at least the last node will be successful
-    # so ignore any failures before "node not available yet"
-    # and any failures of attempting to join to self
+    # if this is the first node 'riak/0'
+    # then join to all other nodes
     set +e
-    for node in $NODES
-    do
-      echo "Joining to -> ${node}"
-      /var/vcap/packages/riak/rel/bin/riak-admin cluster join ${node}
-    done
+    if [[ $JOB_INDEX = 0 ]]
+    then
+      for node in $NOT_FIRST_NODES
+      do
+        echo "Joining $NODES_FIRST to ${node}"
+        /var/vcap/packages/riak/rel/bin/riak-admin cluster join ${node}
+      done
+    fi
     ;;
 
   stop)

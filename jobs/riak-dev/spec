@@ -5,4 +5,7 @@ packages:
 - erlang
 - common
 templates:
-  riak_dev_ctl:                 bin/riak_dev_ctl
+  data/properties.sh.erb: data/properties.sh
+  helpers/ctl_setup.sh: helpers/ctl_setup.sh
+  helpers/ctl_utils.sh: helpers/ctl_utils.sh
+  bin/riak_dev_ctl: bin/riak_dev_ctl

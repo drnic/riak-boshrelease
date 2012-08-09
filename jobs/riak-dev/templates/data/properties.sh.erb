@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# job template binding variables
+
+# job name & index of this VM within cluster
+# e.g. JOB_NAME=riak, JOB_INDEX=0
+export NAME='<%= name %>'
+export JOB_INDEX=<%= index %>
+# full job name, like riak/0 or riak/3
+export JOB_FULL="$NAME/$JOB_INDEX"
+
+# Riak properties
+export NODES=(<%= properties.riak.nodes.join(" ") %>)
+# if this is riak/0, then $NOT_FIRST_NODES is all the other nodes
+# used for looping and joining riak/0 -> all other nodes
+export NODES_NOT_FIRST=(<%= properties.riak.nodes[1..-1].join(" ") %>)
+# reference to first node, for debugging
+export NODES_FIRST='<%= properties.riak.nodes.first %>'
+
