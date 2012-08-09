@@ -58,8 +58,7 @@ case $1 in
 
   stop)
     echo Stopping riak-dev$RIAK_DEV_N
-    /var/vcap/packages/riak/dev$RIAK_DEV_N/bin/riak stop >>$LOG_DIR/riak-dev$RIAK_DEV_N.stdout.log 2>>$LOG_DIR/riak-dev$RIAK_DEV_N.stderr.log
-    rm $PIDFILE
+    kill_and_wait $PIDFILE
     ;;
 
   logs)

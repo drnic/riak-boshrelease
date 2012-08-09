@@ -54,14 +54,7 @@ case $1 in
 
   stop)
     echo Stopping riak
-    
-    # Attempt to leave the ring
-    set +e
-    /var/vcap/packages/riak/rel/bin/riak-admin cluster leave >>$LOG_DIR/riak.stdout.log 2>>$LOG_DIR/riak.stderr.log
-    set -e
-    
-    /var/vcap/packages/riak/rel/bin/riak stop >>$LOG_DIR/riak.stdout.log 2>>$LOG_DIR/riak.stderr.log
-    rm $PIDFILE
+    kill_and_wait $PIDFILE
     ;;
 
   logs)
