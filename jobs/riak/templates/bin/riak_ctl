@@ -9,6 +9,9 @@ set +x
 # Setup env vars and folders for the monit script
 source /var/vcap/jobs/riak/helpers/ctl_setup.sh 'riak'
 
+# riak binaries not found via ctl_setup.sh
+PATH=/var/vcap/packages/riak/rel/bin:$PATH
+
 STORE=/var/vcap/store/riak-dev
 
 case $1 in
@@ -16,17 +19,14 @@ case $1 in
   start)
     pid_guard $PIDFILE "riak"
 
-    # riak installation needs erlang binaries
-    PATH=/var/vcap/packages/erlang/bin:$PATH
-    
     # https://wiki.basho.com/Building-a-Development-Environment.html
     echo Starting riak
-    /var/vcap/packages/riak/rel/bin/riak start >>$LOG_DIR/riak.stdout.log 2>>$LOG_DIR/riak.stderr.log
+    riak start >>$LOG_DIR/riak.stdout.log 2>>$LOG_DIR/riak.stderr.log
 
     # run 'raik-admin status' until it doesn't say 'Node is not running!'
     for (( i = 0; i < 10; i++ ))
     do
-      status=$(/var/vcap/packages/riak/rel/bin/riak-admin status)
+      status=$(riak-admin status)
       if [[ "${status}" = 'Node is not running!' ]]
       then
         echo "${status}"
@@ -47,7 +47,7 @@ case $1 in
       for node in $NOT_FIRST_NODES
       do
         echo "Joining $NODES_FIRST to ${node}"
-        /var/vcap/packages/riak/rel/bin/riak-admin cluster join "${node}"
+        riak-admin cluster join "${node}"
       done
     fi
     ;;
