@@ -44,9 +44,9 @@ case $1 in
     set +e
     if [[ $JOB_INDEX = 0 ]]
     then
-      for node in $NOT_FIRST_NODES
+      for node in $NODES_EXCEPT_FIRST
       do
-        echo "Joining $NODES_FIRST to ${node}"
+        echo "Joining $FIRST_NODE to ${node}"
         riak-admin cluster join "${node}"
       done
     fi
