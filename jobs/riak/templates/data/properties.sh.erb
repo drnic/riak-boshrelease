@@ -11,4 +11,9 @@ export JOB_FULL="$NAME/$JOB_INDEX"
 
 # Riak properties
 export NODES=(<%= properties.riak.nodes.join(" ") %>)
+# if this is riak/0, then $NOT_FIRST_NODES is all the other nodes
+# used for looping and joining riak/0 -> all other nodes
+export NODES_NOT_FIRST=(<%= properties.riak.nodes[1..-1].join(" ") %>)
+# reference to first node, for debugging
+export NODES_FIRST='<%= properties.riak.nodes.first %>'
 

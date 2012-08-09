@@ -47,7 +47,7 @@ case $1 in
       for node in $NOT_FIRST_NODES
       do
         echo "Joining $NODES_FIRST to ${node}"
-        /var/vcap/packages/riak/rel/bin/riak-admin cluster join ${node}
+        /var/vcap/packages/riak/rel/bin/riak-admin cluster join "${node}"
       done
     fi
     ;;
